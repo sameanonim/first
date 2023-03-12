@@ -1,9 +1,11 @@
 import pytest
-from programm import Item
+from programm import Item, Phone
 
 @pytest.fixture
 def item():
     return Item("Айфон", 10000, 9)
+def phone():
+    return Phone("Samsung", 15000, 9, 5)
 
 ##тестирование
 
@@ -28,3 +30,17 @@ def test_repr():
 def test_str():
     item = Item("Item 1", 10, 5)
     assert str(item) == "Item 1"
+
+def test_phone_number_of_sim():
+    phone = Phone('iPhone', 1000, 10, 2)
+    assert phone.number_of_sim == 2
+
+
+def test_phone_add():
+    phone1 = Phone('iPhone', 1000, 10, 2)
+    phone2 = Phone('Samsung', 800, 5, 1)
+    new_phone = phone1.__add__(phone2)
+    assert new_phone.name == 'iPhone & Samsung'
+    assert new_phone.price == 1800
+    assert new_phone.quantity == 15
+    assert new_phone.number_of_sim == 2

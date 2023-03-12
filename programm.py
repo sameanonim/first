@@ -58,3 +58,43 @@ class Item:
         '''Возвращает True, если целое'''
         isInt = int(x) == x
         return isInt
+
+class Phone(Item):
+    number_of_sim = []
+
+    '''Класс для телефона'''
+    def __init__(self, name: str, price: int, quantity: int, number_of_sim: int):
+        '''Инициализирует конструктор класса'''
+        super().__init__(name, price, quantity)
+        self.number_of_sim = number_of_sim
+
+    def __str__(self):
+        '''Возвращает строковое представлен''' 
+        return f'{self.name}.'
+
+    def __repr__(self):
+        '''Возвращает код вызова класса'''
+        return f'{self.name} - {self.price}, {self.quantity}, {self.number_of_sim}'
+
+    def __add__(self, other):
+        '''Сложение экземпляров класса Phone и Item по количеству товара в магазине.'''
+        if isinstance(other, Phone):
+            return Phone(self.name + ' & ' + other.name, self.price + other.price, self.quantity + other.quantity, self.number_of_sim)
+        elif isinstance(other, Item):
+            return Item(self.name + ' & ' + other.name, self.price + other.price, self.quantity + other.quantity)
+        else:
+            raise TypeError("Нельзя складывать объекты других классов с Phone или Item.")
+        
+    @property
+    def number_of_sim(self) -> int:
+        '''Возвращает количество физических SIM-карт'''
+        return self.__number_of_sim
+    
+    @number_of_sim.setter
+    def number_of_sim(self, value: int):
+        '''Проверяет, чтобы количество физических SIM-карт было целым числом больше нуля,
+            иначе возвращает ошибку'''
+        if value <= 0:
+            raise ValueError("Количество физических SIM-карт должно быть целым числом больше нуля.")
+        else:
+            self.__number_of_sim = value
