@@ -1,5 +1,5 @@
 import pytest
-from programm import Item, Phone
+from programm import Item, Phone, Keyboard, KeyboardWithLayout
 
 @pytest.fixture
 def item():
@@ -44,3 +44,21 @@ def test_phone_add():
     assert new_phone.price == 1800
     assert new_phone.quantity == 15
     assert new_phone.number_of_sim == 2
+
+def test_keyboard_language():
+    keyboard = Keyboard("Test Keyboard", 50, 5)
+    assert keyboard.language == "EN"
+
+def test_keyboard_change_language():
+    keyboard = Keyboard("Test Keyboard", 50, 5)
+    keyboard.change_lang()
+    assert keyboard.language == "RU"
+
+def test_keyboard_layout():
+    keyboard = Keyboard("Test Keyboard", 50, 5)
+    assert keyboard.keyboard_layout == "QWERTY"
+
+def test_keyboard_change_layout():
+    keyboard = Keyboard("Test Keyboard", 50, 5)
+    keyboard.change_keyboard_layout("DVORAK")
+    assert keyboard.keyboard_layout == "DVORAK"

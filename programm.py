@@ -98,3 +98,49 @@ class Phone(Item):
             raise ValueError("Количество физических SIM-карт должно быть целым числом больше нуля.")
         else:
             self.__number_of_sim = value
+
+class Keyboard(Item):
+    '''Класс для клавиатуры'''
+    def __init__(self, name: str, price: int, quantity: int):
+        '''Инициализирует конструктор класса'''
+        super().__init__(name, price, quantity)
+        self.__language = 'EN'
+
+    def __str__(self):
+        '''Возвращает информацию пользователю об экземпляре класса'''
+        return f"{self.name}"
+
+    @property
+    def language(self):
+        '''Возвращает язык клавиатуры'''
+        return self.__language
+
+    def change_lang(self):
+        '''Меняет язык клавиатуры на английский или русский'''
+        if self.__language == 'EN':
+            self.__language = 'RU'
+        else:
+            self.__language = 'EN'
+
+    @language.setter
+    def language(self, new_lang: str):
+        '''Сеттер для языка раскладки клавиатуры'''
+        if new_lang not in ["EN", "RU"]:
+            raise AttributeError("property 'language' of 'KeyBoard' object has no setter.")
+        else:
+            self._language = new_lang
+
+
+class KeyboardLanguageMixin:
+    '''Миксин для хранения и изменения раскладки клавиатуры'''
+    def __init__(self, *args, **kwargs):
+        self.keyboard_layout = 'QWERTY'
+        super().__init__(*args, **kwargs)
+
+    def change_keyboard_layout(self, layout: str):
+        '''Меняет раскладку клавиатуры'''
+        self.keyboard_layout = layout
+
+class KeyboardWithLayout(KeyboardLanguageMixin, Keyboard):
+    '''Класс для клавиатуры с раскладкой'''
+    pass
