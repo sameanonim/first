@@ -1,11 +1,13 @@
 import pytest
-from programm import Item, Phone, Keyboard, KeyboardWithLayout
+from programm import Item, Phone, Keyboard, KeyboardLanguageMixin
 
 @pytest.fixture
 def item():
     return Item("Айфон", 10000, 9)
 def phone():
     return Phone("Samsung", 15000, 9, 5)
+def keybord():
+    return Keyboard('Dark Project KD87A', 9600, 5)
 
 ##тестирование
 
@@ -45,20 +47,48 @@ def test_phone_add():
     assert new_phone.quantity == 15
     assert new_phone.number_of_sim == 2
 
-def test_keyboard_language():
-    keyboard = Keyboard("Test Keyboard", 50, 5)
-    assert keyboard.language == "EN"
+class TestKeyboard:
+    def test_init(self):
+        keyboard = Keyboard("Keyboard", 100, 5)
+        assert keyboard.name == "Keyboard"
+        assert keyboard.price == 100
+        assert keyboard.quantity == 5
+        assert keyboard.language == "EN"
 
-def test_keyboard_change_language():
-    keyboard = Keyboard("Test Keyboard", 50, 5)
-    keyboard.change_lang()
-    assert keyboard.language == "RU"
+    def test_change_lang(self):
+        keyboard = Keyboard("Keyboard", 100, 5)
+        assert keyboard.language == "EN"
+        keyboard.change_lang()
+        assert keyboard.language == "RU"
+        keyboard.change_lang()
+        assert keyboard.language == "EN"
 
-def test_keyboard_layout():
-    keyboard = Keyboard("Test Keyboard", 50, 5)
-    assert keyboard.keyboard_layout == "QWERTY"
+    def test_str(self):
+        keyboard = Keyboard("Keyboard", 100, 5)
+        assert str(keyboard) == 'Keyboard)'
 
-def test_keyboard_change_layout():
-    keyboard = Keyboard("Test Keyboard", 50, 5)
-    keyboard.change_keyboard_layout("DVORAK")
-    assert keyboard.keyboard_layout == "DVORAK"
+class TestKeyboardLanguageMixin:
+    def test_init(self):
+        class KeyboardWithLanguage(Keyboard, KeyboardLanguageMixin):
+            pass
+        keyboard = KeyboardWithLanguage("Keyboard", 100, 5)
+        assert keyboard.name == "Keyboard"
+        assert keyboard.price == 100
+        assert keyboard.quantity == 5
+        assert keyboard.language == "EN"
+
+    def test_change_lang(self):
+        class KeyboardWithLanguage(Keyboard, KeyboardLanguageMixin):
+            pass
+        keyboard = KeyboardWithLanguage("Keyboard", 100, 5)
+        assert keyboard.language == "EN"
+        keyboard.change_lang()
+        assert keyboard.language == "RU"
+        keyboard.change_lang()
+        assert keyboard.language == "EN"
+
+    def test_str(self):
+        class KeyboardWithLanguage(Keyboard, KeyboardLanguageMixin):
+            pass
+        keyboard = KeyboardWithLanguage("Keyboard", 100, 5)
+        assert str(keyboard) == 'Keyboard)'
