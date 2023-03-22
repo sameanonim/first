@@ -3,3 +3,4 @@
 /.idea
 /__pycache__
 .coverage
+__pycache__/programm.cpython-310-pytest-7.2.2.pyc
