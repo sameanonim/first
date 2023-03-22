@@ -1,9 +1,15 @@
 import csv
 
+class InstantiateCSVError(Exception):
+    def __init__(self, message):
+        self.message = message
+
+    def __str__(self):
+        return self.message
+    
 class Item:
     pay_rate = 1 #уровень цены на товар
     all = []
-
 
     def __init__(self, name, price, quantity):
         self.__name = name
@@ -39,19 +45,24 @@ class Item:
     def instantiate_from_csv(cls):
         '''Считывает данные из csv-файла'''
         items = []
-        with open('items.csv') as file:
-            data = csv.DictReader(file)
-            for i in data:
-                if cls.is_integer(i['price']):
-                    price = int(float(i['price']))
-                else:
-                    price = float(i['price'])
-                if cls.is_integer(i['quantity']):
-                    quantity = int(float(i['quantity']))
-                else:
-                    quantity = float(i['quantity'])
-                items.append(cls(i['name'], price, quantity))
-        return items
+        try:
+            with open('items.csv') as file:
+                data = csv.DictReader(file)
+                for i in data:
+                    if 'name' not in i or 'price' not in i or 'quantity' not in i:
+                        raise InstantiateCSVError("Файл item.csv поврежден")
+                    if cls.is_integer(i['price']):
+                        price = int(float(i['price']))
+                    else:
+                        price = float(i['price'])
+                    if cls.is_integer(i['quantity']):
+                        quantity = int(float(i['quantity']))
+                    else:
+                        quantity = float(i['quantity'])
+                    items.append(cls(i['name'], price, quantity))
+            return items
+        except FileNotFoundError:
+            raise FileNotFoundError("*Отсутствует файл item.csv*")
 
     @staticmethod
     def is_integer(x):
