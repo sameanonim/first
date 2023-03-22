@@ -1,5 +1,5 @@
 import pytest
-from programm import Item, Phone, Keyboard, KeyboardLanguageMixin
+from programm import Item, Phone, Keyboard, KeyboardLanguageMixin, InstantiateCSVError
 
 @pytest.fixture
 def item():
@@ -10,6 +10,10 @@ def keybord():
     return Keyboard('Dark Project KD87A', 9600, 5)
 
 ##тестирование
+
+def test_instantiate_csv_error_with_message():
+    error = InstantiateCSVError("Error message")
+    assert str(error) == "Error message"
 
 def test_instantiate_from_csv():
     items = Item.instantiate_from_csv()
